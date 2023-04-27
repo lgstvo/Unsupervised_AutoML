@@ -85,7 +85,7 @@ class Clustering():
         self.__clust_alg = SOM(m=m, n=n, dim=dim)
 
     def __load_birch__(self, n_clusters=2):
-        self.__clust_alg = Birch(n_clusters=n_clusters, threshold=0.01)
+        self.__clust_alg = Birch(n_clusters=n_clusters, threshold=0.007)
 
     def __load_ward__(self, n_clusters=2):
         self.__clust_alg = AgglomerativeClustering(n_clusters=n_clusters)
@@ -94,8 +94,14 @@ class Clustering():
         self.__clust_alg = SpectralClustering(n_clusters=n_clusters, random_state=random_state)
 
     def evaluate(self, method, pts, label):
-        calinski_harabasz = calinski_harabasz_score(pts, label)
-        davies_bouldin = davies_bouldin_score(pts, label)
+        try:
+            calinski_harabasz = calinski_harabasz_score(pts, label)
+        except ValueError:
+            calinski_harabasz = 0
+        try:
+            davies_bouldin = davies_bouldin_score(pts, label)
+        except ValueError:
+            davies_bouldin = 100
         #silhouette = silhouette_score(pts, label)
         
         self.results["DB"][method] = davies_bouldin

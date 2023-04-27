@@ -1,12 +1,15 @@
 from clustering import Clustering
+from automl import autoML
 import pandas as pd
 import time
 from dataloader import load_c51
-
+c51path = "/home/luis/Documents/git_rep/DBSCAN_Experimentation/data/capture51/csvs/capture_51_csv_parts/"
 #data = pd.read_csv("c52_packets_csv.csv")
-#data , infected = load_c51("../data/capture51/csvs/capture_51_csv_parts/")
 #data = pd.read_csv("CIC_packets_csv.csv")
-data , infected = load_c51("../data/CIC/csvs/")
+
+data , infected = load_c51(c51path)
+#data , infected = load_c51("../../DBSCAN_Experimentation/data/CIC/csvs/")
+
 #clust = Clustering(data, dataset="capture51", infected=infected)
 clust = Clustering(data, dataset="cic", infected=infected)
 #clust = Clustering(data, dataset="capture52", infected=[])
@@ -24,13 +27,8 @@ c51_checkpoints={
     "icmp_end_1": 7949,
 }
 
-clust.ground_truth("portmap", t=300)
-
-for method in methods:
-    clust.load_method(method)
-    print(method)
-    clust.clusterize("portmap", t=300)
-    clust.confusion_m("portmap", t=300)
+clust.ground_truth("c51", t=7949)
+autoML(clust, methods, 7949)
 '''
     for chkpnt, time_stamp in c51_checkpoints.items():
         t = time.time()

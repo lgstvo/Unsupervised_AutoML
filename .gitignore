@@ -1,0 +1,12 @@
+data/capture45/*.pcap
+data/capture51/*.pcap
+data/CIC/*
+data/*
+
+src/__pycache__/*
+data/img/*
+*.csv
+*.pcap
+*.txt
+src/img/*
+src/img2/*

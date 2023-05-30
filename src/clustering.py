@@ -7,10 +7,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix, calinski_harabasz_score, silhouette_score, davies_bouldin_score
+from sklearn.metrics import accuracy_score
 
 class Clustering():
     
-    def __init__(self, data_csv, dataset, infected):
+    def __init__(self, data_csv, dataset, infected, preprocess):
         self.dataset = data_csv
         if dataset == "capture52":
             self.__defineGT__(["147.32.84.165", "147.32.84.191", "147.32.84.192"])
@@ -21,9 +22,12 @@ class Clustering():
             self.infected = infected
             #self.__defineGT__(["192.168.50.4"])
             #self.dataset = self.process_entropy()
-        self.__compute_PCA__()
+        if preprocess:
+            self.__compute_PCA__()
+        else:
+            self.pca_points = self.dataset.to_numpy()
         self.__clust_alg = None
-        self.results = {"DB":{}, "CH":{}}
+        self.results = {"DB":{}, "CH":{}, "AC":{}}
 
     def __feature_select__(self):
         self.dataset = self.dataset[["Source_int", "Destination_int", "Source_Port", "Destination_Port", "Length", "point_id"]]
@@ -34,7 +38,7 @@ class Clustering():
         data = data.transpose()
         pca.fit(data)
         self.pca_points = pca.components_.transpose()
-        print(self.pca_points)
+        #print(self.pca_points)
        
 
     def __defineGT__(self, botnets):
@@ -102,10 +106,14 @@ class Clustering():
             davies_bouldin = davies_bouldin_score(pts, label)
         except ValueError:
             davies_bouldin = 100
-        #silhouette = silhouette_score(pts, label)
         
+        accuracy = accuracy_score(label, self.infected)
+        print(accuracy)
+        #silhouette = silhouette_score(pts, label)
+
         self.results["DB"][method] = davies_bouldin
         self.results["CH"][method] = calinski_harabasz
+        self.results["AC"][method] = accuracy
 
     def get_results(self):
         return self.results
@@ -116,16 +124,17 @@ class Clustering():
             return
 
         if t != -1:
-            pts = self.pca_points[t-300:t]
+            #pts = self.pca_points[t-300:t]
+            pts = self.pca_points[:t]
         else:
             pts = self.pca_points
         
         clusters = self.__clust_alg.fit_predict(pts[:,:2])
         
         self.evaluate(title_str, pts, clusters)
-        plt.scatter(pts[:, 0], pts[:, 1], c=clusters)
-        plt.savefig("./img/{}_{}.png".format(title_str, self.method))
-        plt.close()
+        #plt.scatter(pts[:, 0], pts[:, 1], c=clusters)
+        #plt.savefig("./img/{}_{}.png".format(title_str, self.method))
+        #plt.close()
 
     def ground_truth(self, title_str, t=-1):
         if t != -1:

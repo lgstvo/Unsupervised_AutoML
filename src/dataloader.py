@@ -32,7 +32,7 @@ def load_c51(folder_path):
             prot = prot + 1
         
         cropped_csv = cropped_csv.replace({'_ws.col.PR':protocol_dict})
-        for (column_name, column_data) in cropped_csv.iteritems():
+        for (column_name, column_data) in cropped_csv.items():
             
             data = column_data.values.tolist()
             if column_name == '_ws.col.SA' or column_name == '_ws.col.DA':

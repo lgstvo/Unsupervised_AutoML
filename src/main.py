@@ -16,7 +16,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 c51path = "/home/luis/Documents/git_rep/DBSCAN_Experimentation/data/capture51/csvs/capture_51_csv_parts/"
 #data = pd.read_csv("c52_packets_csv.csv")
 #data = pd.read_csv("CIC_packets_csv.csv")
-early_warning_url = "../../wgrs-data-2023/data/exp_1.csv"
+early_warning_url = "../../wgrs-data-2023/data/exp_3.csv"
 early_warning = pd.read_csv(early_warning_url, sep=";")
 
 
@@ -60,7 +60,7 @@ c51_checkpoints={
 }
 
 #clust.ground_truth("c51", t=7949)
-autoML(clust, methods, 542)
+autoML(clust, methods, limit)
 '''
     for chkpnt, time_stamp in c51_checkpoints.items():
         t = time.time()

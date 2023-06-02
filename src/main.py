@@ -24,7 +24,7 @@ early_warning = pd.read_csv(early_warning_url, sep=";")
 #data , infected = load_c51("../../DBSCAN_Experimentation/data/CIC/csvs/")
 
 colunas = ['5_kurt_total_ips_origem', '5_skw_total_ips_destino', '5_coefficient_variation_total_pacotes' ]
-limit = 542
+limit = 582
 init = 0
 x_train = early_warning[colunas].copy()[init:limit]
 y_real = early_warning['has_bot'][init:limit]

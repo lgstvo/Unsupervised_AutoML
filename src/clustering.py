@@ -124,7 +124,7 @@ class Clustering():
             return
 
         if t != -1:
-            #pts = self.pca_points[t-300:t]
+            #pts = self.pca_points[(t-500):t]
             pts = self.pca_points[:t]
         else:
             pts = self.pca_points
